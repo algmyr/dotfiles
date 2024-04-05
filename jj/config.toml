@@ -113,7 +113,7 @@ description = "bright white"
 
 "working_copy" = { bold = true }
 
-"op_log current_operation" = { bold = false }
+"op_log current_operation" = { bold = true }
 "op_log current_operation user" = "bright yellow"
 "op_log time"                   = "white"
 "op_log current_operation time" = "bright white"
