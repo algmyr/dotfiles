@@ -2,6 +2,9 @@
 name = "Anton Älgmyr"
 email = "anton@algmyr.se"
 
+[git]
+push-branch-prefix = "algmyr/push-"
+
 [aliases]
 pdiff = ["diff", "--from", "@--"]
 pstatus = ["pdiff", "-s"]
@@ -21,53 +24,61 @@ short-prefixes = "interesting"
 
 "prev_branch()" = "closest(immutable_heads()|branches()|root())"
 "gh-pages" = 'ancestors(remote_branches(exact:"gh-pages"))'
-"interesting" = "ancestors(mine() ~ ::trunk(), 2) | trunk()"
+"my_trunk" = "latest(trunk() | present(main) | present(master), 1)"
+"interesting" = '''
+ancestors(
+  (mine() ~ present(obsolete)::) ~ ::immutable_heads(),
+  2
+) | my_trunk | @'''
 
 [template-aliases]
 'format_timestamp(timestamp)' = 'timestamp.ago()'
 'format_short_change_id(id)' = 'id.shortest()'
 
 
-'label_log_node(content)' = '''
-label("node",
-  coalesce(
-    if(!self, label("elided", content)),
-    if(immutable, label("immutable", content)),
-    if(conflict, label("conflict", content)),
-    if(current_working_copy, label("working_copy", content)),
-    label("normal", content)
-  )
-)
-'''
-'label_op_log_node(content)' = '''
-label("node",
-  coalesce(
-    if(current_operation, label("working_copy", content))
-    label("normal", content)
-  )
-)
-'''
+# 'label_log_node(content)' = '''
+# label("node",
+#   coalesce(
+#     if(!self, label("elided", content)),
+#     if(immutable, label("immutable", content)),
+#     if(conflict, label("conflict", content)),
+#     if(current_working_copy, label("working_copy", content)),
+#     label("normal", content)
+#   )
+# )
+# '''
+# 'label_op_log_node(content)' = '''
+# label("node",
+#   coalesce(
+#     if(current_operation, label("working_copy", content)),
+#     label("normal", content)
+#   )
+# )
+# '''
 
 [templates]
-log_node = '''
-label_log_node(
-  coalesce(
-    if(!self, "⇋"),
-    if(current_working_copy, "@"),
-    if(immutable, "◆"),
-    if(conflict, "×"),
-    "○"
-  )
-)
-'''
-op_log_node = '''
-label_op_log_node(
-  coalesce(
-    if(current_operation, "@")
-    "○"
-  )
-)
-'''
+log_node = 'builtin_log_node'
+op_log_node = 'builtin_op_log_node'
+
+# log_node = '''
+# label_log_node(
+#   coalesce(
+#     if(!self, "~"),
+#     if(current_working_copy, "@"),
+#     if(immutable, "◆"),
+#     if(conflict, "×"),
+#     "○"
+#   )
+# )
+# '''
+# op_log_node = '''
+# label_op_log_node(
+#   coalesce(
+#     if(current_operation, "@"),
+#     "○"
+#   )
+# )
+# '''
 
 [ui]
 default-revset = "(@ | ancestors(immutable_heads().., 2) | trunk()) ~ gh-pages"
@@ -101,12 +112,12 @@ splice.merge-tool-edits-conflict-markers = true
 "prefix" = { bold=true }
 "rest" = "bright black"
 
-"email" = "yellow"  # make bright?
+"email" = "yellow"
 "working_copy email" = "bright yellow"
 "username" = "yellow"
 "working_copy username" = "bright yellow"
-"timestamp" = "white"
-"working_copy timestamp" = "bright white"
+"timestamp" = "default"
+"working_copy timestamp" = "default"
 
 description = "bright white"
 "working_copy description" = { bold = true }
