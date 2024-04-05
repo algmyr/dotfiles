@@ -1,0 +1,38 @@
+[colors]
+foreground = '#E3E0D7'
+background = '#242424'
+compose_cursor = 'orange'
+
+cursor_bg = '#999999'
+cursor_fg = 'black'
+cursor_border = '#999999'
+
+selection_fg = 'black'
+selection_bg = '#fffacd'
+
+ansi = [
+  '#303030',
+  '#D65453',
+  '#48A16F',
+  '#C09C4F',
+  '#6780BD',
+  '#DF679A',
+  '#4E9E9E',
+  '#cccccc',
+]
+brights = [
+  '#767676',
+  '#FF7777',
+  '#80D9A5',
+  '#F7E285',
+  '#9DADD0',
+  '#FF9FD4',
+  '#85D5D4',
+  '#FFFFFF',
+]
+
+[colors.indexed]
+
+[metadata]
+name = 'Algmyr'
+origin_url = 'TODO'
