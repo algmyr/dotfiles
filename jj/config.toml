@@ -20,11 +20,8 @@ short-prefixes = "interesting"
 "furthest(x)" = "x ~ x+::"
 
 "prev_branch()" = "closest(immutable_heads()|branches()|root())"
-# "prev_branch()" = "closest(remote_branches()|branches()|tags()|root())"
 "gh-pages" = 'ancestors(remote_branches(exact:"gh-pages"))'
 "interesting" = "ancestors(mine() ~ ::trunk(), 2) | trunk()"
-#"interesting" = "trunk()::mine() | trunk() | heads(mine())"
-# "interesting" = "trunk()::mine() | trunk() | heads(mine())"
 
 [template-aliases]
 'format_timestamp(timestamp)' = 'timestamp.ago()'
@@ -71,18 +68,6 @@ label_op_log_node(
   )
 )
 '''
-log_node_ascii = '''
-label_log_node(
-  coalesce(
-    if(!self, "="),
-    if(current_working_copy, "@"),
-    if(immutable, "+"),
-    if(conflict, "x"),
-    "o"
-  )
-)
-'''
-
 
 [ui]
 default-revset = "(@ | ancestors(immutable_heads().., 2) | trunk()) ~ gh-pages"
@@ -114,63 +99,21 @@ splice.merge-tool-edits-conflict-markers = true
 
 # Prefix/rest
 "prefix" = { bold=true }
-# "prefix" = { bold=false }
 "rest" = "bright black"
-#"divergent rest" = "red"
-#"divergent prefix" = {fg = "red", underline=true}
-#"hidden prefix" = "default"
 
 "email" = "yellow"  # make bright?
 "working_copy email" = "bright yellow"
 "username" = "yellow"
+"working_copy username" = "bright yellow"
 "timestamp" = "white"
 "working_copy timestamp" = "bright white"
 
 description = "bright white"
 "working_copy description" = { bold = true }
 
-#                             "working_copies" = "magenta"
-#                "working_copy working_copies" = "bright magenta"
-#                                     "branch" = "magenta"
-#                        "working_copy branch" = "bright magenta"
-#                                   "branches" = "magenta"
-#                      "working_copy branches" = "bright magenta"
-#                                       "tags" = "magenta"
-#                          "working_copy tags" = "bright magenta"
-#                                   "git_refs" = "green"
-#                      "working_copy git_refs" = "bright green"
-#                                   "git_head" = "green"
-#                                  "divergent" = "red"
-#                     "working_copy divergent" = "bright red"
-#                        "divergent change_id" = "red"
-#           "working_copy divergent change_id" = "bright red"
-#                                   "conflict" = "red"
-#                      "working_copy conflict" = "bright red"
-#                                      "empty" = "green"
-#                         "working_copy empty" = "bright green"
-#                                "placeholder" = "red"
-#                   "working_copy placeholder" = "bright red"
-#                    "description placeholder" = "yellow"
-#       "working_copy description placeholder" = "yellow"
-#              "empty description placeholder" = "green"
-# "working_copy empty description placeholder" = "bright green"
-#                                  "separator" = "bright black"
-#                                       "root" = "green"
-
 "working_copy" = { bold = true }
 
-#                  "diff header" = "yellow"
-#                   "diff empty" = "cyan"
-#             "diff file_header" = { bold = true }
-#             "diff hunk_header" = "cyan"
-#                 "diff removed" = "red"
-#                   "diff added" = "green"
-#                "diff modified" = "cyan"
-
-     "op_log current_operation" = { bold = false }
-#                    "op_log id" = "blue"
-#  "op_log current_operation id" = "bright blue"
-#                  "op_log user" = "yellow"
+"op_log current_operation" = { bold = false }
 "op_log current_operation user" = "bright yellow"
 "op_log time"                   = "white"
 "op_log current_operation time" = "bright white"
