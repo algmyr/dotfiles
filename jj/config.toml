@@ -35,56 +35,13 @@ ancestors(
 'format_timestamp(timestamp)' = 'timestamp.ago()'
 'format_short_change_id(id)' = 'id.shortest()'
 
-
-# 'label_log_node(content)' = '''
-# label("node",
-#   coalesce(
-#     if(!self, label("elided", content)),
-#     if(immutable, label("immutable", content)),
-#     if(conflict, label("conflict", content)),
-#     if(current_working_copy, label("working_copy", content)),
-#     label("normal", content)
-#   )
-# )
-# '''
-# 'label_op_log_node(content)' = '''
-# label("node",
-#   coalesce(
-#     if(current_operation, label("working_copy", content)),
-#     label("normal", content)
-#   )
-# )
-# '''
-
 [templates]
 log_node = 'builtin_log_node'
 op_log_node = 'builtin_op_log_node'
 
-# log_node = '''
-# label_log_node(
-#   coalesce(
-#     if(!self, "~"),
-#     if(current_working_copy, "@"),
-#     if(immutable, "◆"),
-#     if(conflict, "×"),
-#     "○"
-#   )
-# )
-# '''
-# op_log_node = '''
-# label_op_log_node(
-#   coalesce(
-#     if(current_operation, "@"),
-#     "○"
-#   )
-# )
-# '''
-
 [ui]
 default-revset = "(@ | ancestors(immutable_heads().., 2) | trunk()) ~ gh-pages"
 default-command = "l"
-#graph.style = "ascii"
-#graph.style = "square"
 log-synthetic-elided-nodes = true
 log-word-wrap = true
 
