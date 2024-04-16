@@ -12,9 +12,16 @@ config.font = wezterm.font_with_fallback {
   "Noto Color Emoji",
 }
 config.font_size = 14.0
+config.custom_block_glyphs = false
 config.color_scheme = "Algmyr"
-config.cursor_thickness = 1
 config.bold_brightens_ansi_colors = false
+
+-- Cursor.
+config.cursor_thickness = 1
+config.cursor_blink_rate = 500
+config.animation_fps = 1
+config.cursor_blink_ease_in = 'Constant'
+config.cursor_blink_ease_out = 'Constant'
 
 local padding = 0
 config.window_padding = {
