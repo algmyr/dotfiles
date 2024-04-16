@@ -11,9 +11,11 @@ pstatus = ["pdiff", "-s"]
 editnext = ["edit", "-r", "@+"]
 editprev = ["edit", "-r", "@-"]
 splice = ["--config-toml", 'ui.merge-editor="splice"']
-l = ["log", "-r", "interesting"]
+l = ["log", "-r", "interesting", "--no-pager"]
 ll = ["l", "--summary"]
-xl = ["log", "-r", "xlbase::"]
+delta = ["diff", "--git", "--config-toml=ui.pager='delta'"]
+deltas = ["diff", "--git", "--config-toml=ui.pager='delta -s'"]
+deltan = ["diff", "--git", "--config-toml=ui.pager='delta -n'"]
 
 [revsets]
 short-prefixes = "interesting"
