@@ -36,7 +36,14 @@ ancestors(
 'format_short_change_id(id)' = 'id.shortest()'
 
 [templates]
-log_node = 'builtin_log_node'
+log_node = '''
+coalesce(
+  if(self,
+    if(root, "┴")
+  ),
+  builtin_log_node
+)
+'''
 op_log_node = 'builtin_op_log_node'
 
 [ui]
@@ -51,35 +58,22 @@ splice.program = "vim"
 splice.merge-tool-edits-conflict-markers = true
 
 [colors]
-"node" = { bold = true }
-"node elided" = { fg = "bright black" }
-"node working_copy" = { fg = "green" }
-"node immutable" = { fg = "bright cyan" }
-"node conflict" = { fg = "red" }
-"node normal" = { bold = false }
-
-
 # { fg = "green", bg = "red", bold = true, underline = true }
-"commit_id" = "green"
 "change_id" = "magenta"
-"working_copy commit_id" = "bright green"
+"commit_id" = "bright black"
 "working_copy change_id" = "bright magenta"
-
-# Prefix/rest
-"prefix" = { bold=true }
-"rest" = "bright black"
+"working_copy commit_id" = "bright black"
+"prefix" = { bold=false }
+"rest" = "black"
 
 "email" = "yellow"
-"working_copy email" = "bright yellow"
 "username" = "yellow"
+"working_copy email" = "bright yellow"
 "working_copy username" = "bright yellow"
 "timestamp" = "default"
 "working_copy timestamp" = "default"
 
-description = "bright white"
-"working_copy description" = { bold = true }
-
-"working_copy" = { bold = true }
+working_copy = { bold = true }
 
 "op_log current_operation" = { bold = true }
 "op_log current_operation user" = "bright yellow"
