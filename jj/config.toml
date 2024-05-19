@@ -8,6 +8,7 @@ push-branch-prefix = "algmyr/push-"
 [aliases]
 pdiff = ["diff", "--from", "@--"]
 pstatus = ["pdiff", "-s"]
+pst = ["pstatus"]
 editnext = ["edit", "-r", "@+"]
 editprev = ["edit", "-r", "@-"]
 splice = ["--config-toml", 'ui.merge-editor="splice"']
@@ -26,12 +27,17 @@ short-prefixes = "interesting"
 
 "prev_branch()" = "closest(immutable_heads()|branches()|root())"
 "gh-pages" = 'ancestors(remote_branches(exact:"gh-pages"))'
-"my_trunk" = "latest(trunk() | present(main) | present(master), 1)"
+"archived" = 'description("archive: ") ~ immutable()'
+"reachable_b(x, domain)" = 'ancestors(reachable(x, domain), 2)'
+"empty_other_wc_on_immutable" = "(working_copies() ~ @) & immutable()+ & empty()"
 "interesting" = '''
-ancestors(
-  (mine() ~ present(obsolete)::) ~ ::immutable_heads(),
-  2
-) | my_trunk | @'''
+  reachable_b(
+    mine() ~ archived ~ empty_other_wc_on_immutable,
+    mutable(),
+  )
+  | reachable_b(@, mutable())
+  | immutable_heads() | @
+'''
 
 [template-aliases]
 'format_timestamp(timestamp)' = 'timestamp.ago()'
@@ -49,7 +55,6 @@ coalesce(
 op_log_node = 'builtin_op_log_node'
 
 [ui]
-default-revset = "(@ | ancestors(immutable_heads().., 2) | trunk()) ~ gh-pages"
 default-command = "l"
 log-synthetic-elided-nodes = true
 log-word-wrap = true
