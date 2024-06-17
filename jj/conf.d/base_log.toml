@@ -1,0 +1,35 @@
+[template-aliases]
+'format_commit_empty_text(commit)' = '''
+  if(empty, label("empty", "(empty)"))
+'''
+
+'format_commit_description(commit)' = '''
+  if(description,
+    description.first_line(),
+    label(if(empty, "empty"), description_placeholder),
+  )
+'''
+
+'format_commit_body(commit)' = '''
+  separate(" ",
+    format_commit_empty_text(commit),
+    format_commit_description(commit),
+  )
+'''
+
+'format_commit(commit)' = '''
+  separate("\n",
+    format_short_commit_header(commit),
+    format_commit_body(commit),
+  )
+'''
+
+'algmyr_log_compact' = '''
+  if(root,
+    format_root_commit(self),
+    label(
+      if(current_working_copy, "working_copy"),
+      format_commit(self),
+    ),
+  )
+'''

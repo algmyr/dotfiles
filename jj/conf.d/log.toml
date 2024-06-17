@@ -1,0 +1,18 @@
+[template-aliases]
+'format_timestamp(timestamp)' = 'timestamp.ago()'
+'format_short_change_id(id)' = 'id.shortest()' # ++ id.shortest(8).rest().substr(0, 1)'
+'format_commit_empty_text(commit)' = '''
+  if(empty,
+    if(!commit.contained_in("merges()"), label("empty", "(empty)"))
+  )
+'''
+
+'format_commit_body(commit)' = '''
+  separate("\n",
+    separate(" ",
+      format_commit_empty_text(commit),
+      format_commit_description(commit),
+    ),
+    if(commit.contained_in("work"), diff.summary()),
+  )
+'''

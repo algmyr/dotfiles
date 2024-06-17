@@ -3,7 +3,7 @@ name = "Anton Älgmyr"
 email = "anton@algmyr.se"
 
 [git]
-push-branch-prefix = "algmyr/push-"
+push-bookmark-prefix = "algmyr/push-"
 
 [aliases]
 pdiff = ["diff", "--from", "@--"]
@@ -13,51 +13,75 @@ editnext = ["edit", "-r", "@+"]
 editprev = ["edit", "-r", "@-"]
 splice = ["--config-toml", 'ui.merge-editor="splice"']
 l = ["log", "-r", "interesting", "--no-pager"]
-ll = ["l", "--summary"]
 delta = ["diff", "--git", "--config-toml=ui.pager='delta'"]
 deltas = ["diff", "--git", "--config-toml=ui.pager='delta -s'"]
 deltan = ["diff", "--git", "--config-toml=ui.pager='delta -n'"]
+
+[fix.tools.ruff_isort]
+command = ["ruff", "check", "--select", "I", "--fix", "-"]
+patterns = ["glob:'**/*.py'"]
+
+[fix.tools.ruff]
+command = ["ruff", "format", "--preview", "-"]
+patterns = ["glob:'**/*.py'"]
+
+# [fix.tools.hack]
+# command = ["hack"]
+# patterns = ["glob:'**/*'"]
 
 [revsets]
 short-prefixes = "interesting"
 
 [revset-aliases]
-"closest(x)" = "(::@&x) ~ ::(::@&x)-"
-"furthest(x)" = "x ~ x+::"
+"work" = 'heads(::@ ~ description(exact:"")):: & mutable()'
 
-"prev_branch()" = "closest(immutable_heads()|branches()|root())"
-"gh-pages" = 'ancestors(remote_branches(exact:"gh-pages"))'
+"gh-pages" = 'ancestors(remote_bookmarks(exact:"gh-pages"))'
 "archived" = 'description("archive: ") ~ immutable()'
-"reachable_b(x, domain)" = 'ancestors(reachable(x, domain), 2)'
 "empty_other_wc_on_immutable" = "(working_copies() ~ @) & immutable()+ & empty()"
 "interesting" = '''
-  reachable_b(
-    mine() ~ archived ~ empty_other_wc_on_immutable,
+  ancestors(reachable(
+    (mine() ~ archived ~ empty_other_wc_on_immutable) | @,
     mutable(),
-  )
-  | reachable_b(@, mutable())
-  | immutable_heads() | @
+  ), 2)
+  | trunk() | @
 '''
+
+working_commits = "@|((description(exact:'')&@)-&mutable())"
 
 [template-aliases]
-'format_timestamp(timestamp)' = 'timestamp.ago()'
-'format_short_change_id(id)' = 'id.shortest()'
+'ellipsize(s, n)' = '''
+  if(s.substr(n, 999), s.substr(0, n).substr(0, -1) ++ "…", s)
+'''
+'shell_summary()' = '''
+  separate(' ',
+    if(self.contained_in("@") && empty, label('empty', '(empty)')),
+    if(
+      description,
+      label('shell_desc', "[" ++ ellipsize(description.first_line(), 20) ++ "]")
+    )
+  ) ++ "\n"
+'''
 
 [templates]
+log = 'algmyr_log_compact'
+
 log_node = '''
-coalesce(
-  if(self,
-    if(root, "┴")
-  ),
-  builtin_log_node
-)
+  coalesce(
+    if(self,
+      if(root, "┴")
+    ),
+    builtin_log_node
+  )
 '''
+
 op_log_node = 'builtin_op_log_node'
 
 [ui]
 default-command = "l"
 log-synthetic-elided-nodes = true
 log-word-wrap = true
+# diff-editor = ["nvim", "-c", "DiffEditor $left $right $output"]
+diff-editor = ":builtin"
 
 [merge-tools]
 splice.merge-args = ["$base", "$left", "$left", "$right", "$output", "-c", "SpliceInit"]
@@ -65,13 +89,12 @@ splice.program = "vim"
 splice.merge-tool-edits-conflict-markers = true
 
 [colors]
-# { fg = "green", bg = "red", bold = true, underline = true }
 "change_id" = "magenta"
+"working_copy change_id" = "magenta"
 "commit_id" = "bright black"
-"working_copy change_id" = "bright magenta"
 "working_copy commit_id" = "bright black"
-"prefix" = { bold=false }
 "rest" = "black"
+"prefix" = { bold = false }
 
 "email" = "yellow"
 "username" = "yellow"
@@ -80,10 +103,10 @@ splice.merge-tool-edits-conflict-markers = true
 "timestamp" = "default"
 "working_copy timestamp" = "default"
 
-working_copy = { bold = true }
-
 "op_log current_operation" = { bold = true }
 "op_log current_operation user" = "bright yellow"
 "op_log time"                   = "white"
 "op_log current_operation time" = "bright white"
 "op_log current_operation description" = { bold = true }
+
+"shell_desc" = "bright blue"
