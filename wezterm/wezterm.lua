@@ -12,7 +12,7 @@ config.font = wezterm.font_with_fallback {
   "Noto Color Emoji",
 }
 config.font_size = 14.0
-config.custom_block_glyphs = false
+config.custom_block_glyphs = true
 config.color_scheme = "Algmyr"
 config.bold_brightens_ansi_colors = false
 
