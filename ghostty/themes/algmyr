@@ -1,0 +1,40 @@
+background = #242424
+foreground = #E3E0D7
+
+selection-foreground = #000000
+selection-background = #fffacd
+# or
+# selection-invert-fg-bg = true
+
+cursor-color = #999999
+cursor-text = #000000
+# or
+# cursor-invert-fg-bg = true
+# cursor-opacity = ...
+# cursor-style = ...
+# cursor-style-blink = ...
+
+# black
+palette = 0=#444444
+palette = 8=#767676
+# white
+palette = 7=#cccccc
+palette = 15=#FFFFFF
+# red
+palette = 1=#D65453
+palette = 9=#FF7777
+# green
+palette = 2=#48A16F
+palette = 10=#80D9A5
+# yellow
+palette = 3=#C09C4F
+palette = 11=#F7E285
+# blue
+palette = 4=#6780BD
+palette = 12=#9DADD0
+# magenta
+palette = 5=#DF679A
+palette = 13=#FF9FD4
+# cyan
+palette = 6=#4E9E9E
+palette = 14=#85D5D4
