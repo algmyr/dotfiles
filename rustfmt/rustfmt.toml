@@ -1,0 +1,8 @@
+edition = "2021"
+fn_single_line = true
+tab_spaces = 2
+group_imports = "StdExternalCrate"
+imports_granularity = "Module"
+single_line_if_else_max_width = 90
+struct_lit_width = 80
+max_width = 90
