@@ -1,52 +1,60 @@
+"$schema" = "https://jj-vcs.github.io/jj/prerelease/config-schema.json"
+
 [user]
 name = "Anton Älgmyr"
 email = "anton@algmyr.se"
-
-[git]
-push-bookmark-prefix = "algmyr/push-"
 
 [aliases]
 pdiff = ["diff", "--from", "@--"]
 pstatus = ["pdiff", "-s"]
 pst = ["pstatus"]
-editnext = ["edit", "-r", "@+"]
-editprev = ["edit", "-r", "@-"]
-splice = ["--config-toml", 'ui.merge-editor="splice"']
 l = ["log", "-r", "interesting", "--no-pager"]
-delta = ["diff", "--git", "--config-toml=ui.pager='delta'"]
-deltas = ["diff", "--git", "--config-toml=ui.pager='delta -s'"]
-deltan = ["diff", "--git", "--config-toml=ui.pager='delta -n'"]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
+tug_to = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to"]
+mainline = ["rebase", "-A", "closest_pushable(@)"]
+amend_noprop = ["restore", "--restore-descendants", "--from", "@", "--into", "@-"]
 
-[fix.tools.ruff_isort]
-command = ["ruff", "check", "--select", "I", "--fix", "-"]
-patterns = ["glob:'**/*.py'"]
-
-[fix.tools.ruff]
-command = ["ruff", "format", "--preview", "-"]
-patterns = ["glob:'**/*.py'"]
-
-# [fix.tools.hack]
-# command = ["hack"]
-# patterns = ["glob:'**/*'"]
+vim = ["util", "exec", "--", "jj_helper", "vim"]
+pedit = ["util", "exec", "--", "jj_helper", "pedit"]
+conflicted = ["util", "exec", "--", "jj_helper", "conflicted"]
+conflicted_plain = ["util", "exec", "--", "jj_helper", "conflicted_plain"]
+prefix = ["util", "exec", "--", "jj_helper", "prefix"]
+unprefix = ["util", "exec", "--", "jj_helper", "unprefix"]
 
 [revsets]
 short-prefixes = "interesting"
 
 [revset-aliases]
-"work" = 'heads(::@ ~ description(exact:"")):: & mutable()'
+"work" = 'heads(::@ ~ description(exact:""))::@ & mutable()'
+"closest(start, cond)" = '''
+  heads(::@ & cond)
+'''
 
-"gh-pages" = 'ancestors(remote_bookmarks(exact:"gh-pages"))'
 "archived" = 'description("archive: ") ~ immutable()'
 "empty_other_wc_on_immutable" = "(working_copies() ~ @) & immutable()+ & empty()"
+
 "interesting" = '''
   ancestors(reachable(
-    (mine() ~ archived ~ empty_other_wc_on_immutable) | @,
+    ((mine() & mutable()) ~ archived ~ empty_other_wc_on_immutable) | @,
     mutable(),
   ), 2)
   | trunk() | @
 '''
 
 working_commits = "@|((description(exact:'')&@)-&mutable())"
+
+'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+'_before_megamerge(x)' = '''
+  coalesce(::fork_point((merges() & ::x)-), ::x)
+'''
+'closest_pushable(to)' = '''
+  heads(
+    ::to
+    & ~description(exact:"")
+    & (~empty() | merges())
+    & _before_megamerge(to)
+  )
+'''
 
 [template-aliases]
 'ellipsize(s, n)' = '''
@@ -64,35 +72,29 @@ working_commits = "@|((description(exact:'')&@)-&mutable())"
 
 [templates]
 log = 'algmyr_log_compact'
+git_push_bookmark = '"algmyr/push-" ++ change_id.short()'
 
-log_node = '''
-  coalesce(
-    if(self,
-      if(root, "┴")
-    ),
-    builtin_log_node
-  )
+draft_commit_description = '''
+concat(
+  coalesce(description, default_commit_description, "\n"),
+  surround(
+    "\nJJ: This commit contains the following changes:\n", "",
+    indent("JJ:     ", diff.stat(72)),
+  ),
+  "\nJJ: ignore-rest\n",
+  diff.git(),
+)
 '''
-
-op_log_node = 'builtin_op_log_node'
 
 [ui]
 default-command = "l"
 log-synthetic-elided-nodes = true
 log-word-wrap = true
-# diff-editor = ["nvim", "-c", "DiffEditor $left $right $output"]
 diff-editor = ":builtin"
 
-[merge-tools]
-splice.merge-args = ["$base", "$left", "$left", "$right", "$output", "-c", "SpliceInit"]
-splice.program = "vim"
-splice.merge-tool-edits-conflict-markers = true
-
 [colors]
-"change_id" = "magenta"
-"working_copy change_id" = "magenta"
-"commit_id" = "bright black"
-"working_copy commit_id" = "bright black"
+#"commit_id" = "bright black"
+#"working_copy commit_id" = "bright black"
 "rest" = "black"
 "prefix" = { bold = false }
 

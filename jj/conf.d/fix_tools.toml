@@ -1,0 +1,17 @@
+"$schema" = "https://jj-vcs.github.io/jj/prerelease/config-schema.json"
+
+[fix.tools.ruff_isort]
+command = ["ruff", "check", "--select", "I", "--fix", "-"]
+patterns = ["glob:'**/*.py'"]
+
+[fix.tools.ruff]
+command = ["ruff", "format", "--preview", "-"]
+patterns = ["glob:'**/*.py'"]
+
+[fix.tools.stylua]
+command = ["stylua", "-"]
+patterns = ["glob:'**/*.lua'"]
+
+# [fix.tools.hack]
+# command = ["hack"]
+# patterns = ["glob:'**/*'"]
