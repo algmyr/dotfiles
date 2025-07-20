@@ -8,12 +8,16 @@ email = "anton@algmyr.se"
 pdiff = ["diff", "--from", "@--"]
 pstatus = ["pdiff", "-s"]
 pst = ["pstatus"]
-l = ["log", "-r", "interesting", "--no-pager"]
-tug = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to", "closest_pushable(@)"]
-tug_to = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to"]
-mainline = ["rebase", "-A", "closest_pushable(@)"]
-amend_noprop = ["restore", "--restore-descendants", "--from", "@", "--into", "@-"]
 
+amend_noprop = ["restore", "--restore-descendants", "--from", "@", "--into", "@-"]
+l = ["log", "-r", "default_small", "--no-pager"]
+ll = ["log", "-r", "default", "--no-pager"]
+
+tug_to = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to"]
+tug = ["tug_to", "closest_pushable(@)"]
+mainline = ["rebase", "-A", "closest_pushable(@)"]
+
+# jj_helper utilities
 vim = ["util", "exec", "--", "jj_helper", "vim"]
 pedit = ["util", "exec", "--", "jj_helper", "pedit"]
 conflicted = ["util", "exec", "--", "jj_helper", "conflicted"]
@@ -25,10 +29,13 @@ unprefix = ["util", "exec", "--", "jj_helper", "unprefix"]
 short-prefixes = "interesting"
 
 [revset-aliases]
+"stack(x, n)" = "ancestors(reachable(x, mutable()), n)"
+"stack(x)" = "stack(x, 2)"
+"stack()" = "stack(@, 2)"
+
+"closest(cond, x)" = 'roots(::x & ~cond)'
+"closest(cond)" = 'closest(cond, @)'
 "work" = 'heads(::@ ~ description(exact:""))::@ & mutable()'
-"closest(start, cond)" = '''
-  heads(::@ & cond)
-'''
 
 "archived" = 'description("archive: ") ~ immutable()'
 "empty_other_wc_on_immutable" = "(working_copies() ~ @) & immutable()+ & empty()"
@@ -40,6 +47,8 @@ short-prefixes = "interesting"
   ), 2)
   | trunk() | @
 '''
+"default" = 'interesting'
+"default_small" = 'ancestors((closest(~mutable())::@):: | @, 2) | trunk()'
 
 working_commits = "@|((description(exact:'')&@)-&mutable())"
 
@@ -57,6 +66,10 @@ working_commits = "@|((description(exact:'')&@)-&mutable())"
 '''
 
 [template-aliases]
+'get_trailer(commit, key)' = '''
+  commit.trailers().filter(|t| t.key() == key).map(|t| t.value())
+'''
+
 'ellipsize(s, n)' = '''
   if(s.substr(n, 999), s.substr(0, n).substr(0, -1) ++ "…", s)
 '''
@@ -88,9 +101,11 @@ concat(
 
 [ui]
 default-command = "l"
-log-synthetic-elided-nodes = true
 log-word-wrap = true
 diff-editor = ":builtin"
+
+[diff.color-words]
+conflict = "pair"
 
 [colors]
 #"commit_id" = "bright black"
