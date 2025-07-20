@@ -1,4 +1,4 @@
-target-version = "py311"
+target-version = "py312"
 extend-exclude = [".cache"]
 line-length = 88
 indent-width = 2
@@ -16,8 +16,6 @@ ignore = [  # {{{
     # flake8-annotations (ANN)
     "ANN002",  # missing-type-args                  - Missing type annotation for *{name} 
     "ANN003",  # missing-type-kwargs                - Missing type annotation for **{name} 
-    "ANN101",  # missing-type-self                  - Missing type annotation for {name} in method 
-    "ANN102",  # missing-type-cls                   - Missing type annotation for {name} in classmethod 
     "ANN204",  # missing-return-type-special-method - Missing return type annotation for special method {name} 
     "ANN206",  # missing-return-type-class-method   - Missing return type annotation for classmethod {name} 
     "ANN401",  # any-type                           - Dynamically typed expressions (typing.Any) are disallowed in {name} 
