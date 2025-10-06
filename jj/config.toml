@@ -27,6 +27,8 @@ prefix = ["util", "exec", "--", "jj_helper", "prefix"]
 unprefix = ["util", "exec", "--", "jj_helper", "unprefix"]
 tug = ["util", "exec", "--", "jj_helper", "tug"]
 
+inject = ["new", "--no-edit"]
+
 [revsets]
 short-prefixes = "interesting"
 
