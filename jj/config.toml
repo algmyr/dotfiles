@@ -16,8 +16,6 @@ amend_noprop = ["restore", "--restore-descendants", "--from", "@", "--into", "@-
 l = ["log", "-r", "default_small", "--no-pager"]
 ll = ["log", "-r", "default", "--no-pager"]
 
-tug_to = ["bookmark", "move", "--from", "closest_bookmark(@)", "--to"]
-tug = ["tug_to", "closest_pushable(@)"]
 mainline = ["rebase", "-A", "closest_pushable(@)"]
 
 # jj_helper utilities
@@ -27,6 +25,7 @@ conflicted = ["util", "exec", "--", "jj_helper", "conflicted"]
 conflicted_plain = ["util", "exec", "--", "jj_helper", "conflicted_plain"]
 prefix = ["util", "exec", "--", "jj_helper", "prefix"]
 unprefix = ["util", "exec", "--", "jj_helper", "unprefix"]
+tug = ["util", "exec", "--", "jj_helper", "tug"]
 
 [revsets]
 short-prefixes = "interesting"
