@@ -37,22 +37,33 @@ short-prefixes = "interesting"
 "stack(x)" = "stack(x, 2)"
 "stack()" = "stack(@, 2)"
 
-"closest(cond, x)" = 'roots(::x & ~cond)'
-"closest(cond)" = 'closest(cond, @)'
-"work" = 'heads(::@ ~ description(exact:""))::@ & mutable()'
+"furthest(cond, x)" = 'roots(reachable(x, x | ~::(~cond)))'
+"furthest(cond)" = 'furthest(cond, @)'
+"work" = '''
+  ancestors(furthest(description(exact:"") ~ root()), 2)::@ & mutable()
+'''
 
 "archived" = 'description("archive: ") ~ immutable()'
 "empty_other_wc_on_immutable" = "(working_copies() ~ @) & immutable()+ & empty()"
 
+"flood_log(seeds, domain)" = '''
+  @ | trunk() |
+  ancestors(
+    reachable(seeds, domain) & mutable(),
+    2
+  )
+'''
+
 "interesting" = '''
-  ancestors(reachable(
+  flood_log(
     ((mine() & mutable()) ~ archived ~ empty_other_wc_on_immutable) | @,
     mutable(),
-  ), 2)
-  | trunk() | @
+  )
 '''
 "default" = 'interesting'
-"default_small" = 'ancestors((closest(~mutable())::@):: | @, 2) | trunk()'
+"closest_immutable(x)" = "furthest(mutable(), x)-"
+"default_small" = 'flood_log(@, mutable() | closest_immutable(@))'
+# "default_small" = 'ancestors((furthest(mutable())::@):: | @, 2) | trunk()'
 
 working_commits = "@|((description(exact:'')&@)-&mutable())"
 
