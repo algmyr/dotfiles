@@ -4,6 +4,9 @@
 name = "Anton Älgmyr"
 email = "anton@algmyr.se"
 
+[git]
+colocate = false
+
 [aliases]
 pdiff = ["diff", "--from", "@--"]
 pstatus = ["pdiff", "-s"]
