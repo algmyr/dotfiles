@@ -99,7 +99,6 @@ working_commits = "@|((description(exact:'')&@)-&mutable())"
 '''
 
 [templates]
-log = 'algmyr_log_compact'
 git_push_bookmark = '"algmyr/push-" ++ change_id.short()'
 
 draft_commit_description = '''
@@ -125,7 +124,7 @@ conflict = "pair"
 [colors]
 #"commit_id" = "bright black"
 #"working_copy commit_id" = "bright black"
-"rest" = "black"
+"rest" = "bright black"
 "prefix" = { bold = false }
 
 "email" = "yellow"

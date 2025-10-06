@@ -1,0 +1,15 @@
+"$schema" = "https://jj-vcs.github.io/jj/prerelease/config-schema.json"
+
+[template-aliases]
+'hybrid_id(commit, change_shortest, commit_shortest)' = '''
+  coalesce(
+    if(commit.divergent(),
+      concat(
+        label("divergent", commit.change_id().shortest() ++ "??"),
+        commit.commit_id().shortest()
+      ),
+    ),
+    if(commit.immutable(), commit.commit_id().shortest(commit_shortest)),
+    commit.change_id().shortest(change_shortest),
+  )
+'''
