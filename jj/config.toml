@@ -132,7 +132,10 @@ conflict = "pair"
 "working_copy email" = "bright yellow"
 "working_copy username" = "bright yellow"
 "timestamp" = "default"
+"committer timestamp" = "default"
 "working_copy timestamp" = "default"
+"line_number" = "bright black"
+"content" = "default"
 
 "op_log current_operation" = { bold = true }
 "op_log current_operation user" = "bright yellow"

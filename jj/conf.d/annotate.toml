@@ -1,0 +1,72 @@
+"$schema" = "https://jj-vcs.github.io/jj/prerelease/config-schema.json"
+
+[template-aliases]
+"_annotate_commit_info_prefix(commit)" = '''
+  separate(" ",
+    if(commit.immutable(),
+      commit.commit_id().shortest(8),
+      commit.change_id().shortest(8),
+    ),
+    pad_end(8, truncate_end(8, commit.author().email().local())),
+    pad_end(13, 
+      if(commit_timestamp(commit).before("1 year ago"),
+        commit_timestamp(commit).local().format('%Y-%m-%d'),
+        label('timestamp', commit_timestamp(commit).local().ago()),
+      ),
+    ),
+  )
+'''
+"_annotate_commit_info_relaxed(commit)" = '''
+  separate(" ",
+    if(commit.immutable(),
+      commit.commit_id().shortest(8),
+      commit.change_id().shortest(8),
+    ),
+    commit.author().email().local(),
+    if(commit_timestamp(commit).before("1 year ago"),
+      commit_timestamp(commit).local().format('%Y-%m-%d %H:%M'),
+      label('timestamp', commit_timestamp(commit).local().ago()),
+    ),
+    label("annotate_description",
+      hyperlink(
+        "https://github.com/jj-vcs/jj/commit/" ++ commit.commit_id(),
+        truncate_end(40, commit.description().first_line(), "…")
+      )
+    ),
+  )
+'''
+file_annotate_normal = '''
+concat(
+  if(first_line_in_hunk,
+    _annotate_commit_info_prefix(commit),
+    pad_end(31, ""),
+  ),
+  " ",
+  label("annotate_linenumber", pad_start(4, line_number) ++ " "),
+  truncate_end(80, stringify(content).remove_suffix("\n"), "…") ++ "\n"
+)
+'''
+
+"_gutter(s)" = 'label("gutter", pad_start(4, s) ++ " ")'
+
+file_annotate_header = '''
+concat(
+  if(first_line_in_hunk,
+    if(line_number != 1, _gutter("") ++ "\n") ++
+    label("annotate_header",
+      pad_end(86, _annotate_commit_info_relaxed(commit))
+    )
+    ++ "\n"
+  ),
+  _gutter(line_number),
+  truncate_end(80, stringify(content).remove_suffix("\n"), "…") ++ "\n"
+)
+'''
+
+[templates]
+file_annotate = 'file_annotate_header'
+
+[colors]
+"annotate_header" = { bg = "#1c1c1c" }
+"annotate_description" = { fg = "bright black" }
+"gutter" = { bg = "#1c1c1c" }
