@@ -5,7 +5,7 @@ command = ["ruff", "check", "--select", "I", "--fix", "-"]
 patterns = ["glob:'**/*.py'"]
 
 [fix.tools.ruff]
-command = ["ruff", "format", "--preview", "-"]
+command = ["ruff", "format", "--preview", "-", "--stdin-filename=$path"]
 patterns = ["glob:'**/*.py'"]
 
 [fix.tools.stylua]
