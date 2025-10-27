@@ -12,6 +12,10 @@ patterns = ["glob:'**/*.py'"]
 command = ["stylua", "-"]
 patterns = ["glob:'**/*.lua'"]
 
+[fix.tools.rustfmt]
+command = ["rustfmt", "--emit", "stdout", "--edition", "2024"]
+patterns = ["glob:'**/*.rs'"]
+
 # [fix.tools.hack]
 # command = ["hack"]
 # patterns = ["glob:'**/*'"]
