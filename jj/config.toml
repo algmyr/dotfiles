@@ -134,6 +134,8 @@ conflict = "pair"
 "timestamp" = "default"
 "committer timestamp" = "default"
 "working_copy timestamp" = "default"
+"immutable committer timestamp" = "blue"
+"immutable working_copy timestamp" = "blue"
 "line_number" = "bright black"
 "content" = "default"
 
