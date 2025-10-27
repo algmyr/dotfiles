@@ -6,8 +6,11 @@
     if(commit.divergent(),
       concat(
         label("divergent", commit.change_id().shortest() ++ "??"),
-        commit.commit_id().shortest()
+        commit.commit_id().shortest(commit_shortest)
       ),
+    ),
+    if(commit.hidden(),
+      commit.commit_id().shortest(commit_shortest)
     ),
     if(commit.immutable(), commit.commit_id().shortest(commit_shortest)),
     commit.change_id().shortest(change_shortest),
