@@ -23,8 +23,8 @@
 
 "format_short_commit_header(commit)" = '''
   separate(" ",
-    if(commit.hidden(),
-      label("hidden", format_short_change_id(commit.change_id()) ++ " hidden"),
+    label(
+      if(commit.hidden(), "hidden"),
       hybrid_id(commit, 0, 8),
     ),
     format_short_signature(commit.author()),
