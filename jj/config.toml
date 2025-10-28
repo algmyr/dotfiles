@@ -11,6 +11,7 @@ colocate = false
 pdiff = ["diff", "--from", "@--"]
 pstatus = ["pdiff", "-s"]
 pst = ["pstatus"]
+pstatus_plain = ["pdiff", "--name-only"]
 
 amend_noprop = ["restore", "--restore-descendants", "--from", "@", "--into", "@-"]
 l = ["log", "-r", "default_small", "--no-pager"]
