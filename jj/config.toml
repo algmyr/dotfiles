@@ -127,6 +127,8 @@ conflict = "pair"
 "rest" = "bright black"
 "prefix" = { bold = false }
 
+"evolog commit_id prefix" = "blue"
+
 "email" = "yellow"
 "username" = "yellow"
 "working_copy email" = "bright yellow"
