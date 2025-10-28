@@ -28,6 +28,7 @@ prefix = ["util", "exec", "--", "jj_helper", "prefix"]
 unprefix = ["util", "exec", "--", "jj_helper", "unprefix"]
 tug = ["util", "exec", "--", "jj_helper", "tug"]
 
+files_in = ["util", "exec", "--", "jj_helper", "files_in"]
 inject = ["new", "--no-edit"]
 
 [revsets]
