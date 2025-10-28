@@ -1,0 +1,88 @@
+#!/bin/bash
+
+JJ_PREVIEW="jj --ignore-working-copy --color=always"
+
+# Helpers.
+function _file_pick() {
+  jj files_in "$@" | fzf -m
+}
+
+# Commands.
+function files_in() {
+  COLUMNS=10000 jj diff -s "$@" | sed 's/^..//;s/{.* => \(.*\)}/\1/' | sort -u
+}
+
+function vim() {
+  if (( $# == 0 )); then
+    _file_pick -r work | xargs -r "$EDITOR"
+  else
+    if [[ $1 == "-r" ]]; then
+      shift 1
+    fi
+    _file_pick -r "$@" | xargs -r "$EDITOR"
+  fi
+}
+
+function pedit() {
+  vim -r work "$@"
+}
+
+function _pick_conflicts() {
+   jj resolve -l | fzf -m | sed -E 's/ +[0-9]+-sided conflict.*//'
+}
+
+function conflicted() {
+  _pick_conflicts | xargs -d '\n' -r "$EDITOR"
+}
+
+function conflicted_plain() {
+  _pick_conflicts | xargs -d '\n' -r nvim -u NONE
+}
+
+function prefix() {
+  pre="$1"
+  shift 1
+  for r in "$@"; do
+    jj describe -r "$r" -m "${pre}$(jj log -r "$r" -T description --no-graph)"
+  done
+}
+
+function unprefix() {
+  pre="$1"
+  shift 1
+  for r in "$@"; do
+    jj describe -r "$r" -m "$(jj log -r "$r" -T description --no-graph | sed "1 s/^${pre}//")"
+  done
+}
+
+function dummy() {
+  x="$1"
+  echo "$x" > "$x"
+  jj commit -m "Add $x"
+}
+
+function tug() {
+  if (( $# == 3 )); then
+    if [[ "$2" != "to" ]]; then
+      echo "Error: second argument must be 'to'"
+      return 1
+    fi
+    jj bookmark move --from "$1" --to "$3"
+    return 0
+  fi
+
+  from="closest_bookmark(@)"
+  to="closest_pushable(@)"
+  if (( $# == 0 )); then
+    tug "$from" to "$to"
+  elif (( $# == 1 )); then
+    tug "$1" to "$to"
+  elif (( $# == 2 )); then
+    tug "$from" "$1" "$2"
+  else
+    echo "Error: too many arguments"
+    return 1
+  fi
+}
+
+"$@"
