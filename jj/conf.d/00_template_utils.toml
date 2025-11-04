@@ -16,3 +16,22 @@
     commit.change_id().shortest(change_shortest),
   )
 '''
+
+'format_timestamp(timestamp)' = '''
+  format_timestamp_adaptive("%Y-%m-%d %H:%M", timestamp)
+'''
+
+"format_timestamp_adaptive(format, timestamp)" = '''
+  if(timestamp.after("1 year ago"),
+    timestamp.ago(),
+    timestamp.format(format),
+  )
+'''
+
+# Show email, but shorten GitHub noreply emails.
+"format_short_signature(s)" = '''
+  if(s.email().domain().starts_with("users.noreply.github.com"),
+    s.email().local().replace(regex:"^[0-9]+\\+(.*)", "$1@gh"),
+    s.email(),
+  )
+'''

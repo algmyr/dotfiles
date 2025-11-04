@@ -1,13 +1,6 @@
 "$schema" = "https://jj-vcs.github.io/jj/prerelease/config-schema.json"
 
 [template-aliases]
-'format_timestamp(timestamp)' = '''
-  if(timestamp.after("1 year ago"),
-    timestamp.ago(),
-    timestamp.format("%Y-%m-%d %H:%M"),
-  )
-'''
-
 'format_commit_empty_text(commit)' = '''
   if(empty,
     if(!commit.contained_in("merges()"), label("empty", "(empty)"))
