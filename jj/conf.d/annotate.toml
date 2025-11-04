@@ -3,38 +3,43 @@
 [template-aliases]
 "_annotate_commit_info_prefix(commit)" = '''
   separate(" ",
-    if(commit.immutable(),
-      commit.commit_id().shortest(8),
-      commit.change_id().shortest(8),
-    ),
+    hybrid_id(self.commit(), 8, 8),
     pad_end(8, truncate_end(8, commit.author().email().local())),
     pad_end(13, 
-      if(commit_timestamp(commit).before("1 year ago"),
-        commit_timestamp(commit).local().format('%Y-%m-%d'),
-        label('timestamp', commit_timestamp(commit).local().ago()),
+      format_timestamp_adaptive(
+        "%Y-%m-%d",
+        commit_timestamp(commit),
       ),
     ),
   )
 '''
-"_annotate_commit_info_relaxed(commit)" = '''
+
+"_annotate_commit_info_meta(commit)" = '''
   separate(" ",
-    if(commit.immutable(),
-      commit.commit_id().shortest(8),
-      commit.change_id().shortest(8),
+    hybrid_id(self.commit(), 8, 8),
+    pad_end(
+      16,
+      format_timestamp(self.commit().author().timestamp()),
     ),
-    commit.author().email().local(),
-    if(commit_timestamp(commit).before("1 year ago"),
-      commit_timestamp(commit).local().format('%Y-%m-%d %H:%M'),
-      label('timestamp', commit_timestamp(commit).local().ago()),
-    ),
-    label("annotate_description",
-      hyperlink(
-        "https://github.com/jj-vcs/jj/commit/" ++ commit.commit_id(),
-        truncate_end(40, commit.description().first_line(), "…")
-      )
-    ),
+    format_short_signature(commit.author()),
   )
 '''
+
+"_annotate_commit_info_desc(commit, desc_limit)" = '''
+  label("annotate_description",
+    hyperlink(
+      "https://github.com/jj-vcs/jj/commit/" ++ commit.commit_id(),
+      truncate_end(desc_limit,
+        if(commit.description(),
+          commit.description().first_line(),
+          label(if(commit.empty(), "empty"), description_placeholder),
+        ),
+        "…",
+      )
+    )
+  )
+'''
+
 file_annotate_normal = '''
 concat(
   if(first_line_in_hunk,
@@ -49,19 +54,36 @@ concat(
 
 "_gutter(s)" = 'label("gutter", pad_start(4, s) ++ " ")'
 
-file_annotate_header = '''
+# TODO(algmyr): Can we add list support in the template language?
+#               Key parts:
+#               - List constuction. Could be [a, b, c] or maybe list(a, b, c).
+#               - List chaining/concatenation. Maybe re-use ++ for this.
+#               - List indexing? This is probably less impactful for now.
+"file_annotate_header(gutter_width, full_width)" = '''
 concat(
   if(first_line_in_hunk,
-    if(line_number != 1, _gutter("") ++ "\n") ++
     label("annotate_header",
-      pad_end(86, _annotate_commit_info_relaxed(commit))
+      if(true,
+        separate("\n",
+          pad_end(full_width + gutter_width, _annotate_commit_info_meta(commit)),
+          pad_end(full_width + gutter_width, _annotate_commit_info_desc(commit, full_width + gutter_width)),
+        ),
+        pad_end(full_width + gutter_width,
+          separate(" ",
+            _annotate_commit_info_meta(commit),
+            _annotate_commit_info_desc(commit, full_width/2),
+          )
+        ),
+      ),
     )
     ++ "\n"
   ),
   _gutter(line_number),
-  truncate_end(80, stringify(content).remove_suffix("\n"), "…") ++ "\n"
+  truncate_end(full_width, stringify(content).remove_suffix("\n"), "…") ++ "\n"
 )
 '''
+
+file_annotate_header = 'file_annotate_header(6, 80)'
 
 [templates]
 file_annotate = 'file_annotate_header'
