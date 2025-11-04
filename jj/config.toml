@@ -45,7 +45,8 @@ short-prefixes = "interesting"
   ancestors(furthest(description(exact:"") ~ root()), 2)::@ & mutable()
 '''
 
-"archived" = 'description("archive: ") ~ immutable()'
+"_archive" = '(description(glob:"archive:*") | present(archive)) ~ immutable()'
+"archived" = '(_archive+ ~ _archive::@)::'
 "empty_other_wc_on_immutable" = "(working_copies() ~ @) & immutable()+ & empty()"
 
 "flood_log(seeds, domain)" = '''
@@ -58,14 +59,13 @@ short-prefixes = "interesting"
 
 "interesting" = '''
   flood_log(
-    ((mine() & mutable()) ~ archived ~ empty_other_wc_on_immutable) | @,
+    ((mine() & mutable()) ~ empty_other_wc_on_immutable) | @,
     mutable(),
-  )
+  ) ~ archived
 '''
 "default" = 'interesting'
 "closest_immutable(x)" = "furthest(mutable(), x)-"
-"default_small" = 'flood_log(@, mutable() | closest_immutable(@))'
-# "default_small" = 'ancestors((furthest(mutable())::@):: | @, 2) | trunk()'
+"default_small" = 'flood_log(@, mutable() | closest_immutable(@)) ~ archived'
 
 working_commits = "@|((description(exact:'')&@)-&mutable())"
 
