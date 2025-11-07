@@ -4,13 +4,11 @@
 'hybrid_id(commit, change_shortest, commit_shortest)' = '''
   coalesce(
     if(commit.divergent(),
-      concat(
-        label("divergent", commit.change_id().shortest() ++ "??"),
-        commit.commit_id().shortest(commit_shortest)
-      ),
+      commit.change_id().shortest()
+      ++ label("divergent", format_change_offset(commit))
     ),
     if(commit.hidden(),
-      commit.commit_id().shortest(commit_shortest)
+      label("hidden", commit.commit_id().shortest(commit_shortest))
     ),
     if(commit.immutable(), commit.commit_id().shortest(commit_shortest)),
     commit.change_id().shortest(change_shortest),
