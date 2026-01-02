@@ -14,8 +14,9 @@ pst = ["pstatus"]
 pstatus_plain = ["pdiff", "--name-only"]
 
 amend_noprop = ["restore", "--restore-descendants", "--from", "@", "--into", "@-"]
-l = ["log", "-r", "default_small", "--no-pager"]
-ll = ["log", "-r", "default", "--no-pager"]
+l = ["log", "-r", "twig(@)", "--no-pager"]
+ll = ["log", "-r", "branch(@)", "--no-pager"]
+lll = ["log", "-r", "interesting", "--no-pager"]
 
 mainline = ["rebase", "-A", "closest_pushable(@)"]
 
@@ -47,7 +48,7 @@ short-prefixes = "interesting"
 
 "_archive" = '(description(glob:"archive:*") | present(archive)) ~ immutable()'
 "archived" = '(_archive+ ~ _archive::@)::'
-"empty_other_wc_on_immutable" = "(working_copies() ~ @) & immutable()+ & empty()"
+"uninteresting_wcs" = "(working_copies() ~ @) & immutable()+ & empty()"
 
 "flood_log(seeds, domain)" = '''
   @ | trunk() |
@@ -57,15 +58,20 @@ short-prefixes = "interesting"
   )
 '''
 
-"interesting" = '''
-  flood_log(
-    ((mine() & mutable()) ~ empty_other_wc_on_immutable) | @,
-    mutable(),
-  ) ~ archived
+"flog(seeds, domain)" = '''
+  flood_log(seeds ~ uninteresting_wcs, domain) ~ archived
 '''
-"default" = 'interesting'
+
+# Log presets.
+"interesting" = '''
+  flog(
+    (mine() & mutable()) | @,
+    mutable(),
+  )
+'''
 "closest_immutable(x)" = "furthest(mutable(), x)-"
-"default_small" = 'flood_log(@, mutable() | closest_immutable(@)) ~ archived'
+"branch(x)" = 'flog(x, mutable() | closest_immutable(x))'
+"twig(x)" = 'closest_immutable(x)::(x::)'
 
 working_commits = "@|((description(exact:'')&@)-&mutable())"
 
