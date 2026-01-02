@@ -7,9 +7,37 @@
   hybrid_id(commit, 0, 8)
 '''
 
+'diff_listing(diff)' = '''
+  diff.files().map(|f|
+    label(f.status(),
+      separate(' ',
+        f.status_char(),
+        f.display_diff_path(),
+        if(f.source().conflict() && !f.target().conflict(),
+          label('conflict_description', '(resolved conflict)'),
+        )
+      )
+    )
+  ).join("\n")
+'''
+
+'conflict_listing(commit)' = '''
+  commit.conflicted_files().map(|f|
+    separate(" ",
+      label("conflict", f.path().display()),
+      label('conflict_description', f.conflict_side_count() ++ "-sided conflict"),
+    )
+  ).join("\n")
+'''
+
 "log(commit)" = '''
   builtin_log_compact(commit)
-  ++ if(commit.contained_in("diff_set"), commit.diff().summary())
+  ++ if(commit.contained_in("diff_set"),
+    separate("\n",
+      conflict_listing(commit),
+      diff_listing(commit.diff()),
+    )
+  )
 '''
 
 [revset-aliases]
