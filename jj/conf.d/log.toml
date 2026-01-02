@@ -1,65 +1,19 @@
 "$schema" = "https://jj-vcs.github.io/jj/prerelease/config-schema.json"
 
 [template-aliases]
-'format_commit_empty_text(commit)' = '''
-  if(empty,
-    if(!commit.contained_in("merges()"), label("empty", "(empty)"))
-  )
+"format_short_commit_id(commit_id)" = ''
+
+"format_short_change_id_with_change_offset(commit)" = '''
+  hybrid_id(commit, 0, 8)
 '''
 
-'format_commit_description(commit)' = '''
-  if(description,
-    description.first_line(),
-    label(if(empty, "empty"), description_placeholder),
-  )
+"log(commit)" = '''
+  builtin_log_compact(commit)
+  ++ if(commit.contained_in("diff_set"), commit.diff().summary())
 '''
-
-"format_short_commit_header(commit)" = '''
-  separate(" ",
-    label(
-      if(commit.hidden(), "hidden"),
-      hybrid_id(commit, 0, 8),
-    ),
-    format_short_signature(commit.author()),
-    format_timestamp(commit_timestamp(commit)),
-    commit.bookmarks(),
-    commit.tags(),
-    commit.working_copies(),
-    if(commit.git_head(), label("git_head", "git_head()")),
-    if(commit.conflict(), label("conflict", "conflict")),
-    if(config("ui.show-cryptographic-signatures").as_boolean(),
-      format_short_cryptographic_signature(commit.signature())),
-  )
-'''
-
-"algmyr_log_compact(commit)" = '''
-  if(commit.root(),
-    format_root_commit(commit),
-    label(
-      separate(" ",
-        if(commit.current_working_copy(), "working_copy"),
-        if(commit.immutable(), "immutable", "mutable"),
-        if(commit.conflict(), "conflicted"),
-      ),
-      separate("\n",
-        format_short_commit_header(commit),
-        separate(" ",
-          if(commit.empty(), label("empty", "(empty)")),
-          if(commit.description(),
-            commit.description().first_line(),
-            label(if(commit.empty(), "empty"), description_placeholder),
-          ),
-        ),
-        if(self.contained_in("diff_set"), diff.summary()),
-      ),
-    )
-  )
-'''
-
-'algmyr_log_compact' = 'algmyr_log_compact(self)'
 
 [revset-aliases]
 "diff_set" = "work"
 
 [templates]
-log = 'algmyr_log_compact'
+log = 'log(self)'
