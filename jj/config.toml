@@ -36,6 +36,9 @@ inject = ["new", "--no-edit"]
 short-prefixes = "interesting"
 
 [revset-aliases]
+# Limiting to mutable() avoids a full scan!
+"mutable_description(pat)" = 'description(pat) & mutable()'
+
 "stack(x, n)" = "ancestors(reachable(x, mutable()), n)"
 "stack(x)" = "stack(x, 2)"
 "stack()" = "stack(@, 2)"
@@ -43,10 +46,10 @@ short-prefixes = "interesting"
 "furthest(cond, x)" = 'roots(reachable(x, x | cond::))'
 "furthest(cond)" = 'furthest(cond, @)'
 "work" = '''
-  ancestors(furthest(description(exact:"") ~ root()), 2)::@ & mutable()
+  ancestors(furthest(mutable_description(exact:"")), 2)::@ & mutable()
 '''
 
-"_archive" = '(description(glob:"archive:*") | present(archive)) ~ immutable()'
+"_archive" = '(mutable_description(glob:"archive:*") | present(archive)) ~ immutable()'
 "archived" = '(_archive+ ~ _archive::@)::'
 "uninteresting_wcs" = "(working_copies() ~ @) & immutable()+ & empty()"
 
