@@ -125,7 +125,7 @@ concat(
 '''
 
 [ui]
-default-command = "l"
+default-command = "ll"
 log-word-wrap = true
 diff-editor = ":builtin"
 
