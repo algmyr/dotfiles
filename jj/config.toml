@@ -39,10 +39,6 @@ short-prefixes = "interesting"
 # Limiting to mutable() avoids a full scan!
 "mutable_description(pat)" = 'description(pat) & mutable()'
 
-"stack(x, n)" = "ancestors(reachable(x, mutable()), n)"
-"stack(x)" = "stack(x, 2)"
-"stack()" = "stack(@, 2)"
-
 "furthest(cond, x)" = 'roots(reachable(x, x | cond))'
 "furthest(cond)" = 'furthest(cond, @)'
 "work" = '''
@@ -53,6 +49,7 @@ short-prefixes = "interesting"
 "archived" = '(_archive+ ~ _archive::@)::'
 "uninteresting_wcs" = "(working_copies() ~ @) & immutable()+ & empty()"
 
+# The basis for a lot of log templates.
 "flood_log(seeds, domain)" = '''
   @ | trunk() |
   ancestors(
@@ -61,6 +58,7 @@ short-prefixes = "interesting"
   )
 '''
 
+# Flood log with with some extras.
 "flog(seeds, domain)" = '''
   flood_log(seeds ~ uninteresting_wcs, domain) ~ archived
 '''
@@ -92,12 +90,8 @@ working_commits = "@|((description(exact:'')&@)-&mutable())"
 '''
 
 [template-aliases]
-'get_trailer(commit, key)' = '''
-  commit.trailers().filter(|t| t.key() == key).map(|t| t.value())
-'''
-
 'ellipsize(s, n)' = '''
-  if(s.substr(n, 999), s.substr(0, n).substr(0, -1) ++ "…", s)
+  if(s.substr(n, n+1), s.substr(0, n).substr(0, -1) ++ "…", s)
 '''
 'shell_summary()' = '''
   separate(' ',
@@ -133,8 +127,6 @@ diff-editor = ":builtin"
 conflict = "pair"
 
 [colors]
-#"commit_id" = "bright black"
-#"working_copy commit_id" = "bright black"
 "rest" = "bright black"
 "prefix" = { bold = false }
 
