@@ -43,7 +43,7 @@ short-prefixes = "interesting"
 "stack(x)" = "stack(x, 2)"
 "stack()" = "stack(@, 2)"
 
-"furthest(cond, x)" = 'roots(reachable(x, x | cond::))'
+"furthest(cond, x)" = 'roots(reachable(x, x | cond))'
 "furthest(cond)" = 'furthest(cond, @)'
 "work" = '''
   ancestors(furthest(mutable_description(exact:"")), 2)::@ & mutable()
