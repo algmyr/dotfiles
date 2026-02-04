@@ -74,7 +74,7 @@ short-prefixes = "interesting"
 "branch(x)" = 'flog(x, mutable() | closest_immutable(x))'
 "twig(x)" = 'closest_immutable(x)::(x::)'
 
-working_commits = "@|((description(exact:'')&@)-&mutable())"
+working_commits = 'furthest(mutable_description(exact:""))::@'
 
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
 '_before_megamerge(x)' = '''
