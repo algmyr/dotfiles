@@ -16,6 +16,7 @@ patterns = ["glob:'**/*.lua'"]
 command = ["rustfmt", "--emit", "stdout", "--edition", "2024"]
 patterns = ["glob:'**/*.rs'"]
 
-# [fix.tools.hack]
-# command = ["hack"]
-# patterns = ["glob:'**/*'"]
+[fix.tools.hack]
+enabled = false
+command = ["hack"]
+patterns = ["glob:'**/*'"]
