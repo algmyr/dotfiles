@@ -133,3 +133,6 @@ conflict = "pair"
 "op_log time"                   = "white"
 "op_log current_operation time" = "bright white"
 "op_log current_operation description" = { bold = true }
+
+[snapshot]
+auto-update-stale = true
