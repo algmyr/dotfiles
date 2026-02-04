@@ -1,0 +1,21 @@
+"$schema" = "https://jj-vcs.github.io/jj/prerelease/config-schema.json"
+
+[revset-aliases]
+working_commits = 'furthest(mutable_description(exact:""))::@'
+
+[template-aliases]
+'ellipsize(s, n)' = '''
+  if(s.substr(n, n+1), s.substr(0, n).substr(0, -1) ++ "…", s)
+'''
+'shell_summary()' = '''
+  separate(' ',
+    if(self.contained_in("@") && empty, label('empty', '(empty)')),
+    if(
+      description,
+      label('shell_desc', "[" ++ ellipsize(description.first_line(), 20) ++ "]")
+    )
+  ) ++ "\n"
+'''
+
+[colors]
+"shell_desc" = "bright blue"

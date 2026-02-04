@@ -74,8 +74,6 @@ short-prefixes = "interesting"
 "branch(x)" = 'flog(x, mutable() | closest_immutable(x))'
 "twig(x)" = 'closest_immutable(x)::(x::)'
 
-working_commits = 'furthest(mutable_description(exact:""))::@'
-
 'closest_bookmark(to)' = 'heads(::to & bookmarks())'
 '_before_megamerge(x)' = '''
   coalesce(::fork_point((merges() & ::x)-), ::x)
@@ -87,20 +85,6 @@ working_commits = 'furthest(mutable_description(exact:""))::@'
     & (~empty() | merges())
     & _before_megamerge(to)
   )
-'''
-
-[template-aliases]
-'ellipsize(s, n)' = '''
-  if(s.substr(n, n+1), s.substr(0, n).substr(0, -1) ++ "…", s)
-'''
-'shell_summary()' = '''
-  separate(' ',
-    if(self.contained_in("@") && empty, label('empty', '(empty)')),
-    if(
-      description,
-      label('shell_desc', "[" ++ ellipsize(description.first_line(), 20) ++ "]")
-    )
-  ) ++ "\n"
 '''
 
 [templates]
@@ -149,5 +133,3 @@ conflict = "pair"
 "op_log time"                   = "white"
 "op_log current_operation time" = "bright white"
 "op_log current_operation description" = { bold = true }
-
-"shell_desc" = "bright blue"
