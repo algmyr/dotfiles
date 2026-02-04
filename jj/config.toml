@@ -87,6 +87,9 @@ short-prefixes = "interesting"
   )
 '''
 
+[template-aliases]
+'archived' = 'self.contained_in("archived")'
+
 [templates]
 git_push_bookmark = '"algmyr/push-" ++ change_id.short()'
 
