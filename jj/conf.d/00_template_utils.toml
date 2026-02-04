@@ -20,7 +20,7 @@
 '''
 
 "format_timestamp_adaptive(format, timestamp)" = '''
-  if(timestamp.after("1 year ago"),
+  if(timestamp.after("1 week ago"),
     timestamp.ago(),
     timestamp.format(format),
   )
