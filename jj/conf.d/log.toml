@@ -30,8 +30,8 @@
   ).join("\n")
 '''
 
-"log(commit)" = '''
-  builtin_log_compact(commit)
+"with_listing(content, commit)" = '''
+  content
   ++ if(commit.contained_in("diff_set"),
     separate("\n",
       conflict_listing(commit),
@@ -40,8 +40,10 @@
   )
 '''
 
+"log(commit)" = 'builtin_log_compact(commit)'
+
 [revset-aliases]
 "diff_set" = "work"
 
 [templates]
-log = 'log(self)'
+log = 'with_listing(log(self), self)'
