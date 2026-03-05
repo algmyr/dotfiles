@@ -61,28 +61,4 @@ function dummy() {
   jj commit -m "Add $x"
 }
 
-function tug() {
-  if (( $# == 3 )); then
-    if [[ "$2" != "to" ]]; then
-      echo "Error: second argument must be 'to'"
-      return 1
-    fi
-    jj bookmark move --from "$1" --to "$3"
-    return 0
-  fi
-
-  from="closest_bookmarks(@)"
-  to="closest_pushable(@)"
-  if (( $# == 0 )); then
-    tug "$from" to "$to"
-  elif (( $# == 1 )); then
-    tug "$1" to "$to"
-  elif (( $# == 2 )); then
-    tug "$from" "$1" "$2"
-  else
-    echo "Error: too many arguments"
-    return 1
-  fi
-}
-
 "$@"

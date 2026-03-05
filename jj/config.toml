@@ -27,13 +27,15 @@ conflicted = ["util", "exec", "--", "jj_helper", "conflicted"]
 conflicted_plain = ["util", "exec", "--", "jj_helper", "conflicted_plain"]
 prefix = ["util", "exec", "--", "jj_helper", "prefix"]
 unprefix = ["util", "exec", "--", "jj_helper", "unprefix"]
-tug = ["util", "exec", "--", "jj_helper", "tug"]
+tug = ["bookmark", "advance"]
 
 files_in = ["util", "exec", "--", "jj_helper", "files_in"]
 inject = ["new", "--no-edit"]
 
 [revsets]
 short-prefixes = "interesting"
+bookmark-advance-to = "closest_pushable(@)"
+bookmark-advance-from = "closest_bookmarks(@)"
 
 [revset-aliases]
 # Limiting to mutable() avoids a full scan!
