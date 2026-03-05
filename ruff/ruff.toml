@@ -101,6 +101,7 @@ select = [  # {{{
     "N",   # pep8-naming (N)
     "PGH", # pygrep-hooks (PGH)
     "PIE", # flake8-pie (PIE)
+    "PYI", # flake8-pyi (PYI)
     "Q",   # flake8-quotes (Q)
     "RET", # flake8-return (RET)
     "RSE", # flake8-raise (RSE)
