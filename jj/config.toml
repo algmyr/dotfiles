@@ -74,7 +74,7 @@ short-prefixes = "interesting"
 "branch(x)" = 'flog(x, mutable() | closest_immutable(x))'
 "twig(x)" = 'closest_immutable(x)::(x::)'
 
-'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+'closest_bookmarks(to)' = 'heads(::to & bookmarks())'
 '_before_megamerge(x)' = '''
   coalesce(::fork_point((merges() & ::x)-), ::x)
 '''

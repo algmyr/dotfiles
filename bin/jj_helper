@@ -71,7 +71,7 @@ function tug() {
     return 0
   fi
 
-  from="closest_bookmark(@)"
+  from="closest_bookmarks(@)"
   to="closest_pushable(@)"
   if (( $# == 0 )); then
     tug "$from" to "$to"
