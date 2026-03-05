@@ -139,5 +139,23 @@ conflict = "pair"
 "op_log current_operation time" = "bright white"
 "op_log current_operation description" = { bold = true }
 
+"diff added token" = { bg = "#006600" }
+"diff removed token" = { bg = "#880000" }
+"diff modified token" = { bg = "#444400" }
+"diff token" = { fg = "#E3E0D7", underline = false }
+
+"diff header" = "yellow"
+"diff empty" = "cyan"
+"diff binary" = "cyan"
+"diff file_header" = { bold = true }
+"diff hunk_header" = "cyan"
+
+"diff removed" = { fg = "#cc3333" }
+"diff added" = { fg = "#33cc33" }
+"diff modified" = "cyan"
+"diff renamed" = "cyan"
+"diff copied" = "magenta"
+"diff access-denied" = { bg = "red" }
+
 [snapshot]
 auto-update-stale = true
