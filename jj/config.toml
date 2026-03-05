@@ -116,8 +116,8 @@ diff-editor = ":builtin"
 conflict = "pair"
 
 [colors]
-"rest" = "bright black"
-"prefix" = { bold = false }
+"rest" = { dim = true, bold = false }
+"prefix" = { bold = true }
 
 "evolog commit_id prefix" = "blue"
 
@@ -128,8 +128,8 @@ conflict = "pair"
 "timestamp" = "bright black"
 "committer timestamp" = "bright black"
 "working_copy timestamp" = "bright black"
-"immutable committer timestamp" = "blue"
-"immutable working_copy timestamp" = "blue"
+"immutable committer timestamp" = "bright blue"
+"immutable working_copy timestamp" = "bright blue"
 "line_number" = "bright black"
 "content" = "default"
 
