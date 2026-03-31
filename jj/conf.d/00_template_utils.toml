@@ -4,7 +4,7 @@
 'hybrid_id(commit, change_shortest, commit_shortest)' = '''
   coalesce(
     if(commit.divergent(),
-      commit.change_id().shortest()
+      commit.change_id().shortest(change_shortest)
       ++ label("divergent", format_change_offset(commit))
     ),
     if(commit.hidden(),

@@ -4,7 +4,7 @@
 "format_short_commit_id(commit_id)" = ''
 
 "format_short_change_id_with_change_offset(commit)" = '''
-  hybrid_id(commit, 0, 8)
+  hybrid_id(commit, 4, 8)
 '''
 
 'diff_listing(diff)' = '''
