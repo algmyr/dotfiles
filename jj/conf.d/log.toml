@@ -1,4 +1,4 @@
-"$schema" = "https://jj-vcs.github.io/jj/prerelease/config-schema.json"
+#:schema https://docs.jj-vcs.dev/prerelease/config-schema.json
 
 [template-aliases]
 "format_short_commit_id(commit_id)" = ''
